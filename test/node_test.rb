@@ -4,6 +4,6 @@ require 'minitest/pride'
 require './lib/binary_search_tree'
 require 'pry'
 
-class NodeTest
-  
+class NodeTest < Minitest::Test
+
 end
