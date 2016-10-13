@@ -1,0 +1,3 @@
+
+class NodeTest
+end
