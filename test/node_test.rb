@@ -25,16 +25,15 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_skips_prefix_letters_if_already_inserted
-    binding.pry
+    #binding.pry
     root = Node.new
     root.insert("car")
     root.insert("carts")
-    root.insert("casted")
-    root.insert("bust")
-    root.insert("busted")
-    root.insert("flower")    
-    #assert that keys are different and unique
+    links = root.links.map {|link| link.keys}
+    uniqs = links.uniq
+    assert_equal links, uniqs
   end
+
 
 
   
