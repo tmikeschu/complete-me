@@ -10,6 +10,11 @@ class NodeTest < Minitest::Test
     assert Node.new
   end
 
+  def test_it_returns_nothing_if_empty_key_inserted
+    root = Node.new
+    refute root.insert("")
+  end
+
   def test_it_inserts_one_key
     root = Node.new
     root.insert("b")
@@ -69,6 +74,7 @@ class NodeTest < Minitest::Test
   end 
 
   def test_it_populates_newline_separated_list
+    skip
     root = Node.new
     dictionary = File.read("/usr/share/dict/words")
     assert root.populate(dictionary)
@@ -81,6 +87,7 @@ class NodeTest < Minitest::Test
   end    
 
   def test_it_counts_all_populated_words
+    skip
     root = Node.new
     dictionary = File.read("/usr/share/dict/words")
     root.populate(dictionary)    
