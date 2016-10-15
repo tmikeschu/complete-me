@@ -59,10 +59,8 @@ class Node
     else
       @links << {first_key => new_terminal_node}
     end
-
   end
 
-  
   def new_terminal_node 
     Node.new(terminal = true)
   end
