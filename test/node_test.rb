@@ -98,7 +98,7 @@ class NodeTest < Minitest::Test
     root = Node.new
     root.insert("carts")
     root.insert("cast")
-    assert_equal ["carts", "cast"], root.suggest("")
+    assert_equal ["carts", "cast"], root.suggest("c")
   end
 
 end
