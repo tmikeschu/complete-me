@@ -94,11 +94,11 @@ class NodeTest < Minitest::Test
     assert_equal 235886, root.count
   end
 
-  def test_it_suggests_all_words_for_empty_suggest_argument
+  def test_it_suggests_all_words_if_given_no_argument
     root = Node.new
     root.insert("carts")
-    root.insert("cast")
-    assert_equal ["carts", "cast"], root.suggest("c")
+    root.insert("beetle")
+    assert_equal ["carts", "beetle"], root.suggest("")
   end
 
 end

@@ -90,30 +90,7 @@ class Node
     end
   end
 
-  def suggest(keys)
-    keys = keys_array(keys)
-    first_key = keys.shift
-    suggestion_paths(first_key, keys)
-  end
-
-  def suggestion_paths(first_key, keys)
-    suggestions = []
-    word = ''
-    if keys.empty?
-      key_already_inserted?(first_key)
-    elsif key_already_inserted?(first_key)
-      word + first_key
-      next_node(first_key).suggest(keys)
-    else
-      word + keys.join
-    end
-
-    suggestions << word
-  end
-
-  def find_terminals_from(key)
-    
-  end
-
   
+  
+
 end
