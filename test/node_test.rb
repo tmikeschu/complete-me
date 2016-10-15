@@ -34,7 +34,13 @@ class NodeTest < Minitest::Test
     assert_equal links, uniqs
   end
 
+  def test_it_flips_intermediate_switch_if_new_insert_ends_within_existing_path
+    #binding.pry
+    root = Node.new
+    root.insert("carts")
+    refute root.next_node("c").next_node("a").next_node("r").terminal
+    root.insert("car")
+    assert root.next_node("c").next_node("a").next_node("r").terminal
+  end
 
-
-  
 end

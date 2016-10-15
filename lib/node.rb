@@ -1,17 +1,17 @@
 require 'pry'
 
 class Node
-  attr_accessor :links
+  attr_accessor :links,
+                :terminal
 
   def initialize(terminal = false)
     @links = []
     @terminal = terminal
-    @count = 0
   end
 
   def letters_array(letters)
     if letters.is_a? String
-      letters.chars
+      letters.downcase.chars
     else
       letters
     end
@@ -24,11 +24,10 @@ class Node
   end
   
   def insert_decision(first, letters)
-    #binding.pry
     if letters.empty?
-      add_link(first, new_terminal_node)
+      add_link_or_flip_terminal_switch?(first)
     elsif letter_already_inserted?(first)
-      next_link(first).insert(letters)
+      next_node(first).insert(letters)
     else
       add_link_and_move_to_next_letter(first, letters)
     end
@@ -46,17 +45,25 @@ class Node
     inserted_letters = links.map { |link| link.keys}.flatten
   end
 
-  def next_link(first)
+  def next_node(first)
+    #binding.pry
     link_of_letter(first).values.first
   end
 
   def link_of_letter(first)
-    link = links.find {|link| link.keys[0] == first}
+    links.find {|link| link.keys[0] == first}
   end
   
-  def add_link(letter, node)
-    @links << {letter => node}
+  def add_link_or_flip_terminal_switch?(first)
+    #binding.pry
+    if letter_already_inserted?(first)
+      link_of_letter(first).values.first.terminal = true
+    else
+      @links << {first => new_terminal_node}
+    end
+
   end
+
   
   def new_terminal_node 
     Node.new(terminal = true)
@@ -66,5 +73,5 @@ class Node
       new_node = Node.new
       @links << {first => new_node}
       new_node.insert(letters)
-    end
+  end
 end
