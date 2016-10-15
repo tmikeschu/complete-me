@@ -11,7 +11,7 @@ class Node
 
   def keys_array(keys)
     if keys.is_a? String
-      keys.downcase.chars
+      keys.chars
     else
       keys
     end
@@ -78,6 +78,15 @@ class Node
       word_count += links.map {|link| link.values.first.count}.reduce(:+)
     end
     word_count 
+  end
+
+  def populate(file)
+    if file.empty?
+      "File empty"
+    else
+      files_lines = file.split
+      files_lines.each { |line| insert(line) }
+    end
   end
 
 end

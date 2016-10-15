@@ -64,8 +64,27 @@ class NodeTest < Minitest::Test
     root = Node.new
     root.insert("car")
     root.insert("cartel")
-    binding.pry
+    #binding.pry
     assert_equal 2, root.count
+  end 
+
+  def test_it_populates_newline_separated_list
+    root = Node.new
+    dictionary = File.read("/usr/share/dict/words")
+    assert root.populate(dictionary)
+  end
+
+  def test_it_returns_empty_if_file_empty
+    root = Node.new
+    dictionary = ''
+    assert_equal "File empty", root.populate(dictionary) 
+  end    
+
+  def test_it_counts_all_populated_words
+    root = Node.new
+    dictionary = File.read("/usr/share/dict/words")
+    root.populate(dictionary)    
+    assert_equal 235886, root.count
   end
 
 end
