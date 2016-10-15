@@ -70,4 +70,14 @@ class Node
       @links << {first_key => new_node}
       new_node.insert(keys)
   end
+
+  def count
+    word_count = 0
+    word_count += 1 if terminal
+    if links.any?
+      word_count += links.map {|link| link.values.first.count}.reduce(:+)
+    end
+    word_count 
+  end
+
 end

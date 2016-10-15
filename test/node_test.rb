@@ -42,4 +42,30 @@ class NodeTest < Minitest::Test
     assert root.next_node("c").next_node("a").next_node("r").terminal
   end
 
+  def test_it_adds_one_to_word_count_if_node_is_terminal
+    root = Node.new
+    refute_equal 1, root.count
+    root.terminal = true
+    assert_equal 1, root.count
+  end
+
+  def test_it_returns_word_count_of_zero_if_no_words_inserted
+    root = Node.new
+    assert_equal 0, root.count
+  end
+
+  def test_it_counts_first_inserted_word
+    root = Node.new
+    root.insert("car")
+    assert_equal 1, root.count
+  end
+
+  def test_it_counts_second_inserted_word
+    root = Node.new
+    root.insert("car")
+    root.insert("cartel")
+    binding.pry
+    assert_equal 2, root.count
+  end
+
 end
