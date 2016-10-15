@@ -90,4 +90,23 @@ class Node
     end
   end
 
+  def suggest(keys)
+    
+    keys = keys_array(keys)
+    first_key = keys.shift
+    suggestion_paths(first_key, keys)
+  end
+
+  def suggestion_paths(first_key, keys)
+    suggestions = []
+    if keys.empty?
+    end
+
+    if links.any?
+      suggestions << links.map{|link| link.keys.first}
+    end
+    suggestions
+  end
+
+  
 end
