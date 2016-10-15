@@ -9,57 +9,55 @@ class Node
     @terminal = terminal
   end
 
-  def letters_array(letters)
-    if letters.is_a? String
-      letters.downcase.chars
+  def keys_array(keys)
+    if keys.is_a? String
+      keys.downcase.chars
     else
-      letters
+      keys
     end
   end
 
-  def insert(letters)
-    letters = letters_array(letters)
-    first   = letters.shift
-    insert_decision(first, letters)
+  def insert(keys)
+    keys = keys_array(keys)
+    first_key   = keys.shift
+    insert_decision(first_key, keys)
   end
   
-  def insert_decision(first, letters)
-    if letters.empty?
-      add_link_or_flip_terminal_switch?(first)
-    elsif letter_already_inserted?(first)
-      next_node(first).insert(letters)
+  def insert_decision(first_key, keys)
+    if keys.empty?
+      add_link_or_flip_terminal_switch?(first_key)
+    elsif key_already_inserted?(first_key)
+      next_node(first_key).insert(keys)
     else
-      add_link_and_move_to_next_letter(first, letters)
+      add_link_and_move_to_next_key(first_key, keys)
     end
   end
 
-  def letter_already_inserted?(first)
+  def key_already_inserted?(first_key)
     if links.any?
-      already_inserted_letters.include?(first)
+      already_inserted_keys.include?(first_key)
     else
       false
     end
   end
 
-  def already_inserted_letters
-    inserted_letters = links.map { |link| link.keys}.flatten
+  def already_inserted_keys
+    inserted_keys = links.map { |link| link.keys}.flatten
   end
 
-  def next_node(first)
-    #binding.pry
-    link_of_letter(first).values.first
+  def next_node(first_key)
+    link_of_key(first_key).values.first
   end
 
-  def link_of_letter(first)
-    links.find {|link| link.keys[0] == first}
+  def link_of_key(first_key)
+    links.find {|link| link.keys[0] == first_key}
   end
   
-  def add_link_or_flip_terminal_switch?(first)
-    #binding.pry
-    if letter_already_inserted?(first)
-      link_of_letter(first).values.first.terminal = true
+  def add_link_or_flip_terminal_switch?(first_key)
+    if key_already_inserted?(first_key)
+      link_of_key(first_key).values.first.terminal = true
     else
-      @links << {first => new_terminal_node}
+      @links << {first_key => new_terminal_node}
     end
 
   end
@@ -69,9 +67,9 @@ class Node
     Node.new(terminal = true)
   end
 
-  def add_link_and_move_to_next_letter(first, letters)
+  def add_link_and_move_to_next_key(first_key, keys)
       new_node = Node.new
-      @links << {first => new_node}
-      new_node.insert(letters)
+      @links << {first_key => new_node}
+      new_node.insert(keys)
   end
 end

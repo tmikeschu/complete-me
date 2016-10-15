@@ -10,21 +10,21 @@ class NodeTest < Minitest::Test
     assert Node.new
   end
 
-  def test_it_inserts_one_letter
+  def test_it_inserts_one_key
     root = Node.new
     root.insert("b")
     root_link = root.links.first.keys
     assert_equal ["b"], root_link
   end
 
-  def test_it_inserts_two_letters
+  def test_it_inserts_two_keys
     root = Node.new
     root.insert("bo")
     second_link = root.links.first.values.first.links.first.keys
     assert_equal ["o"], second_link
   end
 
-  def test_it_skips_prefix_letters_if_already_inserted
+  def test_it_skips_prefix_keys_if_already_inserted
     #binding.pry
     root = Node.new
     root.insert("car")
@@ -35,7 +35,6 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_flips_intermediate_switch_if_new_insert_ends_within_existing_path
-    #binding.pry
     root = Node.new
     root.insert("carts")
     refute root.next_node("c").next_node("a").next_node("r").terminal
