@@ -1,7 +1,10 @@
+require 'simplecov'
+SimpleCov.start
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/node'
+
 require 'pry'
 
 class NodeTest < Minitest::Test
@@ -30,7 +33,6 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_skips_prefix_keys_if_already_inserted
-    #binding.pry
     root = Node.new
     root.insert("car")
     root.insert("carts")
@@ -69,9 +71,20 @@ class NodeTest < Minitest::Test
     root = Node.new
     root.insert("car")
     root.insert("cartel")
-    #binding.pry
     assert_equal 2, root.count
   end 
+
+  def test_it_counts_all_inserted_words
+    root = Node.new
+    root.insert("car")
+    root.insert("cartel")
+    root.insert("flower")
+    assert_equal 3, root.count
+    root.insert("flee")
+    root.insert("apple")
+    root.insert("application")    
+    assert_equal 6, root.count
+  end
 
   def test_it_populates_newline_separated_list
     skip
@@ -101,5 +114,6 @@ class NodeTest < Minitest::Test
     root.insert("clay")
     
   end
+
 
 end
