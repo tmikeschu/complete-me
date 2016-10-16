@@ -99,21 +99,36 @@ class Node
   end
 
   def suggest(word = "", keys)
+    #binding.pry
     suggestions = []
     keys = keys_array(keys)
     first_key = keys.shift
-    suggestions + collect_words
+    if links.any? 
+     links.each {|link| suggestions << collect_words(link)}
+    end
+    suggestions.flatten.sort
   end
 
-  def collect_words(word = "", words = [])
+  def collect_words(link, word = "", words = [])
     #binding.pry
+    word += link.keys.first
+    add_leaf?(word, words)
+    add_intermediate_word?(word, words)
+    link.values.first.links.each {|link| link.values.first.collect_words(link, word, words)}.compact.flatten
+    words
+  end
+
+  def add_leaf?(word, words)
     if leaf?
       words << word
-      words
-    elsif links.any?
-      words << word if intermediate_word?
-      word += links.first.keys.first
-      links.first.values.first.collect_words(word, words)
-    end 
+      words.compact
+    end
   end
+
+  def add_intermediate_word?(word, words)
+    words << word if intermediate_word?
+  end
+
+
+
 end

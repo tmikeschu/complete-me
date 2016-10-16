@@ -126,4 +126,27 @@ class NodeTest < Minitest::Test
     assert_equal ["cas", "cast", "casts"], root.suggest("")
   end
 
+  def test_it_suggests_all_of_two_words_if_no_argument_passed
+    #binding.pry
+    root = Node.new
+    root.insert("casts")
+    root.insert("boat")
+    assert_equal ["boat", "casts"], root.suggest("")
+  end
+
+  def test_it_suggests_all_words_if_no_argument_passed
+    #binding.pry
+    root = Node.new
+    root.insert("casts")
+    root.insert("boat")
+    root.insert("blow")
+    root.insert("try")
+    root.insert("tremendous")
+    root.insert("used")
+    root.insert("flower")
+    suggestions = ["blow", "boat", "casts", "flower", "tremendous", "try", "used"]
+    assert_equal suggestions, root.suggest("")
+  end
+
+
 end
