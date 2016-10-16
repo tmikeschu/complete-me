@@ -105,11 +105,25 @@ class NodeTest < Minitest::Test
     assert_equal 235886, root.count
   end
 
-  def test_it_suggests_all_words_if_empty_argument_passed
+  def test_it_suggests_only_word_if_empty_argument_passed
     root = Node.new
     root.insert("casts")
     assert_equal ["casts"], root.suggest("")
   end
 
+  def test_it_suggests_intermediate_word_too_if_empty_argument_passed
+    root = Node.new
+    root.insert("casts")
+    root.insert("cast")
+    assert_equal ["cast", "casts"], root.suggest("")
+  end
+
+  def test_it_suggests_intermediate_words_too_if_empty_argument_passed
+    root = Node.new
+    root.insert("casts")
+    root.insert("cast")
+    root.insert("cas")
+    assert_equal ["cas", "cast", "casts"], root.suggest("")
+  end
 
 end

@@ -102,17 +102,18 @@ class Node
     suggestions = []
     keys = keys_array(keys)
     first_key = keys.shift
-    suggestions << collect_letters
+    suggestions + collect_words
   end
 
-  def collect_letters(word = "")
-    intermediates = []
+  def collect_words(word = "", words = [])
+    #binding.pry
     if leaf?
-      word
+      words << word
+      words
     elsif links.any?
-      intermediates << word if intermediate_word?
+      words << word if intermediate_word?
       word += links.first.keys.first
-      links.first.values.first.collect_letters(word)
+      links.first.values.first.collect_words(word, words)
     end 
   end
 end
