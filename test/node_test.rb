@@ -148,5 +148,25 @@ class NodeTest < Minitest::Test
     assert_equal suggestions, root.suggest("")
   end
 
+  def test_it_suggests_only_word_with_full_argument_as_prefix
+    root = Node.new
+    root.insert("casts")
+    root.insert("candy")
+    assert_equal ["candy"], root.suggest("can")
+    assert_equal ['casts'], root.suggest("cas")
+  end
+
+  def test_it_suggests_all_words_with_exact_argument_prefix
+    root = Node.new
+    root.insert("pizza")
+    root.insert("ploy")
+    root.insert("pizzeria")
+    root.insert("ivory")
+    root.insert("pizzicato")
+    root.insert("pizzazz")
+    piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
+    assert_equal piz_words, root.suggest('piz')
+    assert_equal ["ploy"], root.suggest("pl")
+  end
 
 end

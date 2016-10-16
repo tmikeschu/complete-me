@@ -98,23 +98,47 @@ class Node
     end
   end
 
-  def suggest(word = "", keys)
+  def suggest(word = "")
     #binding.pry
-    suggestions = []
-    keys = keys_array(keys)
+    keys = keys_array(word)
+    go_to_node_of_prefix_end(word, keys)
+  end
+  
+  def go_to_node_of_prefix_end(word, keys)
     first_key = keys.shift
+    if first_key.nil?
+      traverse_links(word)
+    elsif keys.empty?
+      empty_key_decision(first_key, word)
+    elsif key_already_inserted?(first_key)
+      next_node(first_key).go_to_node_of_prefix_end(word, keys)
+    else
+      "There are no words to suggest"      
+    end
+  end
+
+  def empty_key_decision(first_key, word)
+    if key_already_inserted?(first_key)
+      next_node(first_key).traverse_links(word)
+    else 
+      "There are no words to suggest"
+    end
+  end
+
+  def traverse_links(word)
+    suggestions = []
     if links.any? 
-     links.each {|link| suggestions << collect_words(link)}
+     links.each {|link| suggestions << collect_words(word, link)}
     end
     suggestions.flatten.sort
   end
-
-  def collect_words(link, word = "", words = [])
+  
+  def collect_words(word, words = [], link)
     #binding.pry
     word += link.keys.first
     add_leaf?(word, words)
     add_intermediate_word?(word, words)
-    link.values.first.links.each {|link| link.values.first.collect_words(link, word, words)}.compact.flatten
+    link.values.first.links.each {|link| link.values.first.collect_words(word, words, link)}.compact.flatten
     words
   end
 
@@ -128,7 +152,6 @@ class Node
   def add_intermediate_word?(word, words)
     words << word if intermediate_word?
   end
-
 
 
 end
