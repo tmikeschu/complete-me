@@ -1,5 +1,3 @@
-require 'simplecov'
-SimpleCov.start
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
 require 'minitest/pride'
@@ -107,12 +105,10 @@ class NodeTest < Minitest::Test
     assert_equal 235886, root.count
   end
 
-  def test_it_suggests_argument_plus_next_letter
+  def test_it_suggests_all_words_if_empty_argument_passed
     root = Node.new
     root.insert("casts")
-    root.insert("cry")
-    root.insert("clay")
-    
+    assert_equal ["casts"], root.suggest("")
   end
 
 

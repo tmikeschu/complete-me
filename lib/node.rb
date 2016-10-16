@@ -18,7 +18,7 @@ class Node
   end
 
   def leaf?
-    terminal && links.empty 
+    terminal && links.empty?
   end
 
   def intermediate_word?
@@ -98,9 +98,23 @@ class Node
     end
   end
 
-  def suggest(node = "", keys)
+  def suggest(word = "", keys)
     #binding.pry
-    
+    suggestions = []
+    keys = keys_array(keys)
+    first_key = keys.shift
+    suggestions << collect_letters
   end
 
+  def collect_letters(word = "")
+    intermediates = []
+    binding.pry
+    if leaf?
+      word
+    elsif links.any?
+      intermediates << word if intermediate_word?
+      word += links.first.keys.first
+      links.first.values.first.collect_letters(word)
+    end 
+  end
 end
