@@ -17,6 +17,14 @@ class Node
     end
   end
 
+  def leaf?
+    terminal && links.empty 
+  end
+
+  def intermediate_word?
+    terminal && links.any?
+  end
+
   def insert(keys)
     return if keys.nil? or keys.empty?
     keys = keys_array(keys)
