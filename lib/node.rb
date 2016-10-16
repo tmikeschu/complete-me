@@ -99,7 +99,6 @@ class Node
   end
 
   def suggest(word = "", keys)
-    #binding.pry
     suggestions = []
     keys = keys_array(keys)
     first_key = keys.shift
@@ -108,7 +107,6 @@ class Node
 
   def collect_letters(word = "")
     intermediates = []
-    binding.pry
     if leaf?
       word
     elsif links.any?
