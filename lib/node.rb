@@ -90,27 +90,9 @@ class Node
     end
   end
 
-  def suggest(keys)
-    binding.pry
-    suggestions = []
-    return if keys.nil? or keys.empty?
-    keys = keys_array(keys)
-    first_key   = keys.shift
-    word = ""
-    if key_already_inserted?(first_key)
-      words = []
-      
-      suggestions << next_node(first_key).links.map do |link|
-        words << first_key + link.keys.first
-      end
-      
-      suggestions.map {|suggestion| suggestion = suggestion.first}
-      
-    else
-    end
-
+  def suggest(node = "", keys)
+    #binding.pry
+    
   end
-  
-  
 
 end

@@ -99,8 +99,7 @@ class NodeTest < Minitest::Test
     root.insert("casts")
     root.insert("cry")
     root.insert("clay")
-    #binding.pry
-    assert_equal ["ca"], root.suggest("c")
+    
   end
 
 end
