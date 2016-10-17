@@ -85,7 +85,6 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_populates_newline_separated_list
-    skip
     root = Node.new
     dictionary = File.read("/usr/share/dict/words")
     assert root.populate(dictionary)
@@ -98,7 +97,6 @@ class NodeTest < Minitest::Test
   end    
 
   def test_it_counts_all_populated_words
-    skip
     root = Node.new
     dictionary = File.read("/usr/share/dict/words")
     root.populate(dictionary)    
@@ -106,14 +104,12 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_only_word_if_empty_argument_passed
-    skip
     root = Node.new
     root.insert("casts")
     assert_equal ["casts"], root.suggest("")
   end
 
   def test_it_suggests_intermediate_word_too_if_empty_argument_passed
-    skip
     root = Node.new
     root.insert("casts")
     root.insert("cast")
@@ -121,7 +117,6 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_intermediate_words_too_if_empty_argument_passed
-    skip
     root = Node.new
     root.insert("casts")
     root.insert("cast")
@@ -130,7 +125,6 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_all_of_two_words_if_no_argument_passed
-    skip
     root = Node.new
     root.insert("casts")
     root.insert("boat")
@@ -138,7 +132,6 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_all_words_if_no_argument_passed
-    skip
     root = Node.new
     root.insert("casts")
     root.insert("boat")
@@ -151,8 +144,13 @@ class NodeTest < Minitest::Test
     assert_equal suggestions, root.suggest("")
   end
 
+  def test_it_returns_message_if_argument_does_not_have_suggestions
+    root = Node.new
+    root.insert("casts")
+    assert_equal "There are no words to suggest", root.suggest("fi")
+  end
+  
   def test_it_suggests_only_word_with_full_argument_as_prefix
-    skip
     root = Node.new
     root.insert("casts")
     root.insert("candy")
