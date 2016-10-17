@@ -143,8 +143,8 @@ class Node
 
   def collect_words(word, words = [], link)
     word += letter_of(link)
-    add_leaf?(word, words)
     words << word if intermediate_word?
+    words << word if leaf?
     node_of(link).links.each {|link| node_of(link).collect_words(word, words, link)}
     words
   end
@@ -157,14 +157,6 @@ class Node
     terminal && links.any?
   end
 
-  def add_leaf?(word, words)
-    if leaf?
-      words << word
-      words.compact
-    end
-  end
-
-  
 
 
 end
