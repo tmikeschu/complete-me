@@ -40,7 +40,7 @@ class CompleteMeTest < Minitest::Test
     assert_equal 235886, result.count
   end
 
-  def test_returns_seggestion_for_substring
+  def test_returns_suggestion_for_substring
     completion.insert("pizza")
     completion.insert("pizzaria")
     completion.insert("book")
