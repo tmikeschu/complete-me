@@ -78,8 +78,6 @@ class NodeTest < Minitest::Test
     assert_equal 1, root.count
     root.insert("application")    
     assert_equal 2, root.count
-    root.insert("buzz")
-    assert_equal 3, root.count
   end
 
   def test_it_populates_newline_separated_list
