@@ -85,6 +85,7 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_populates_newline_separated_list
+    skip
     root = Node.new
     dictionary = File.read("/usr/share/dict/words")
     assert root.populate(dictionary)
@@ -97,6 +98,7 @@ class NodeTest < Minitest::Test
   end    
 
   def test_it_counts_all_populated_words
+    skip
     root = Node.new
     dictionary = File.read("/usr/share/dict/words")
     root.populate(dictionary)    
@@ -149,7 +151,7 @@ class NodeTest < Minitest::Test
     root.insert("casts")
     assert_equal "There are no words to suggest", root.suggest("fi")
   end
-  
+
   def test_it_suggests_only_word_with_full_argument_as_prefix
     root = Node.new
     root.insert("casts")
