@@ -106,12 +106,14 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_only_word_if_empty_argument_passed
+    skip
     root = Node.new
     root.insert("casts")
     assert_equal ["casts"], root.suggest("")
   end
 
   def test_it_suggests_intermediate_word_too_if_empty_argument_passed
+    skip
     root = Node.new
     root.insert("casts")
     root.insert("cast")
@@ -119,6 +121,7 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_intermediate_words_too_if_empty_argument_passed
+    skip
     root = Node.new
     root.insert("casts")
     root.insert("cast")
@@ -127,7 +130,7 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_all_of_two_words_if_no_argument_passed
-    #binding.pry
+    skip
     root = Node.new
     root.insert("casts")
     root.insert("boat")
@@ -135,7 +138,7 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_all_words_if_no_argument_passed
-    #binding.pry
+    skip
     root = Node.new
     root.insert("casts")
     root.insert("boat")
@@ -149,11 +152,18 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_suggests_only_word_with_full_argument_as_prefix
+    skip
     root = Node.new
     root.insert("casts")
     root.insert("candy")
     assert_equal ["candy"], root.suggest("can")
     assert_equal ['casts'], root.suggest("cas")
+  end
+
+  def test_it_suggests_argument_if_argument_is_valid_word
+    root = Node.new
+    root.insert("green")
+    assert_equal ["green"], root.suggest("green")
   end
 
   def test_it_suggests_all_words_with_exact_argument_prefix
@@ -166,7 +176,7 @@ class NodeTest < Minitest::Test
     root.insert("pizzazz")
     piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
     assert_equal piz_words, root.suggest('piz')
-    assert_equal ["ploy"], root.suggest("pl")
+    assert_equal piz_words.first(2), root.suggest("pizza")
   end
 
 end

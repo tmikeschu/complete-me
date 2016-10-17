@@ -105,6 +105,7 @@ class Node
   end
   
   def go_to_node_of_prefix_end(word, keys)
+    #binding.pry
     first_key = keys.shift
     if first_key.nil?
       traverse_links(word)
@@ -118,6 +119,7 @@ class Node
   end
 
   def empty_key_decision(first_key, word)
+    #binding.pry
     if key_already_inserted?(first_key)
       next_node(first_key).traverse_links(word)
     else 
@@ -126,9 +128,13 @@ class Node
   end
 
   def traverse_links(word)
+    #binding.pry
     suggestions = []
+    suggestions << word if leaf? or intermediate_word?
     if links.any? 
-     links.each {|link| suggestions << collect_words(word, link)}
+      links.each do |link|
+        suggestions << link.values.first.collect_words(word, link)
+      end
     end
     suggestions.flatten.sort
   end
@@ -143,6 +149,7 @@ class Node
   end
 
   def add_leaf?(word, words)
+    #binding.pry
     if leaf?
       words << word
       words.compact
@@ -150,6 +157,7 @@ class Node
   end
 
   def add_intermediate_word?(word, words)
+    #binding.pry
     words << word if intermediate_word?
   end
 
