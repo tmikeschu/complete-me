@@ -132,7 +132,7 @@ class Node
         suggestions << link.values.first.collect_words(word, link)
       end
     end
-    suggestions.flatten.sort
+    suggestions.flatten
   end
   
   def collect_words(word, words = [], link)
