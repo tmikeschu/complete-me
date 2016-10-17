@@ -30,7 +30,7 @@ class NodeTest < Minitest::Test
     assert_equal ["o"], second_link
   end
 
-  def test_it_skips_prefix_keys_if_already_inserted
+  def test_it_skips_substring_keys_if_already_inserted
     root = Node.new
     root.insert("car")
     root.insert("carts")
@@ -152,7 +152,7 @@ class NodeTest < Minitest::Test
     assert_equal "There are no words to suggest", root.suggest("fi")
   end
 
-  def test_it_suggests_only_word_with_full_argument_as_prefix
+  def test_it_suggests_only_word_with_full_argument_as_substring
     root = Node.new
     root.insert("casts")
     root.insert("candy")
@@ -166,7 +166,7 @@ class NodeTest < Minitest::Test
     assert_equal ["green"], root.suggest("green")
   end
 
-  def test_it_suggests_all_words_with_exact_argument_prefix
+  def test_it_suggests_all_words_with_exact_argument_substring
     root = Node.new
     root.insert("pizza")
     root.insert("ploy")
@@ -177,6 +177,14 @@ class NodeTest < Minitest::Test
     piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
     assert_equal piz_words, root.suggest('piz')
     assert_equal piz_words.first(2), root.suggest("pizza")
+  end
+
+  def test_it_selects_chosen_suggestion
+    root = Node.new
+    root.insert("pizza")
+    root.insert("pizzeria")
+    suggestions = root.suggest("piz")
+    assert root.select("piz", "pizzeria")
   end
 
 end

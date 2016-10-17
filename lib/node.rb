@@ -103,16 +103,16 @@ class Node
     if keys.empty?
       traverse_links(word)
     else
-      go_to_node_of_prefix_end(word, keys)
+      go_to_node_of_substring_end(word, keys)
     end
   end
   
-  def go_to_node_of_prefix_end(word, keys)
+  def go_to_node_of_substring_end(word, keys)
     first_key = keys.shift 
     if keys.empty?
       empty_key_decision(first_key, word)
     elsif key_already_inserted?(first_key)
-      next_node(first_key).go_to_node_of_prefix_end(word, keys)
+      next_node(first_key).go_to_node_of_substring_end(word, keys)
     else
       "There are no words to suggest"      
     end
@@ -157,6 +157,8 @@ class Node
     terminal && links.any?
   end
 
-
+  def select(substring, choice)
+    
+  end
 
 end
