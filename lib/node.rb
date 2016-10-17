@@ -53,7 +53,7 @@ class Node
   end
 
   def already_inserted_keys
-    inserted_keys = links.map { |link| link.keys}.flatten
+    inserted_keys = links.map { |link| link.keys.first}
   end
 
   def next_node(first_key)
@@ -137,17 +137,16 @@ class Node
 
   def add_words_to_suggestions(word, suggestions) 
     if links.any? 
-      links.each do |link|
-        suggestions << node_of(link).collect_words(word, link)
-      end
+      #links.each do |link|
+      suggestions << collect_words(word)
+      #end
     end
   end
 
-  def collect_words(word, words = [], link)
-    word  += letter_of(link)
-    words << word if intermediate_word?
-    words << word if leaf?
-    node_of(link).links.each {|link| node_of(link).collect_words(word, words, link)}
+  def collect_words(word, words = [], letter = "")
+    word  += letter
+    words << word if leaf? or intermediate_word? 
+    links.each {|link| node_of(link).collect_words(word, words, letter_of(link))}
     words
   end
 
