@@ -91,11 +91,11 @@ class Node
     word_count 
   end
 
-  def populate(file)
-    if file.empty?
+  def populate(converted_file)
+    if converted_file.empty?
       "File empty"
     else
-      files_lines = file.split
+      files_lines = converted_file.split
       files_lines.each { |line| insert(line) }
     end
   end
@@ -106,9 +106,12 @@ class Node
     if keys.empty?
       traverse_links(word)
     else
-      go_to_node_of_substring_end(word, keys)
+      suggestions = go_to_node_of_substring_end(word, keys)
     end
+    suggestions
   end
+
+ 
   
   def go_to_node_of_substring_end(word, keys)
     #binding.pry 
@@ -161,8 +164,5 @@ class Node
     terminal && links.any?
   end
 
-  def select(substring, choice)
-    frequent_picks << {substring => choice}
-  end
 
 end

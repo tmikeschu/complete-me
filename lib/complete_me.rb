@@ -12,10 +12,10 @@ class CompleteMe
 
   def count
     root.count
-  end
+ end
 
-  def populate(file)
-    root.populate(file)
+  def populate(converted_file)
+    root.populate(converted_file)
   end
 
   def suggest(word = "")
