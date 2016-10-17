@@ -2,12 +2,9 @@ require 'pry'
 
 class Node
   attr_accessor :links,
-                :terminal,
-                #:frequent_picks
-
+                :terminal
   def initialize(terminal = false)
     @links          = []
-    @frequent_picks = []
     @terminal       = terminal
   end
 
@@ -106,9 +103,8 @@ class Node
     if keys.empty?
       traverse_links(word)
     else
-      suggestions = go_to_node_of_substring_end(word, keys)
+      go_to_node_of_substring_end(word, keys)
     end
-    suggestions
   end
 
  
