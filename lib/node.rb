@@ -3,7 +3,7 @@ require 'pry'
 class Node
   attr_accessor :links,
                 :terminal,
-                :frequent_picks
+                #:frequent_picks
 
   def initialize(terminal = false)
     @links          = []
