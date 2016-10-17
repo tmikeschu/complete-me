@@ -130,7 +130,7 @@ class NodeTest < Minitest::Test
     root = Node.new
     root.insert("casts")
     root.insert("boat")
-    assert_equal ["boat", "casts"], root.suggest("")
+    assert_equal ["boat", "casts"], root.suggest("").sort
   end
 
   def test_it_suggests_all_words_if_no_argument_passed
@@ -143,7 +143,7 @@ class NodeTest < Minitest::Test
     root.insert("used")
     root.insert("flower")
     suggestions = ["blow", "boat", "casts", "flower", "tremendous", "try", "used"]
-    assert_equal suggestions, root.suggest("")
+    assert_equal suggestions, root.suggest("").sort
   end
 
   def test_it_returns_message_if_argument_does_not_have_suggestions

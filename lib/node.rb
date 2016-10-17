@@ -17,16 +17,16 @@ class Node
     end
   end
 
-  def leaf?
-    terminal && links.empty?
+  def node_of(link)
+    link.values.first
   end
 
-  def intermediate_word?
-    terminal && links.any?
+  def letter_of(link)
+    link.keys.first
   end
 
   def insert(keys)
-    return if keys.nil? or keys.empty?
+    return nil if keys.nil? or keys.empty?
     keys = keys_array(keys)
     first_key   = keys.shift
     insert_decision(first_key, keys)
@@ -55,16 +55,16 @@ class Node
   end
 
   def next_node(first_key)
-    link_of_key(first_key).values.first
+    node_of(link_of_key(first_key))
   end
 
   def link_of_key(first_key)
-    links.find {|link| link.keys[0] == first_key}
+    links.find {|link| letter_of(link) == first_key}
   end
   
   def add_link_or_flip_terminal_switch?(first_key)
     if key_already_inserted?(first_key)
-      link_of_key(first_key).values.first.terminal = true
+      node_of(link_of_key(first_key)).terminal = true
     else
       @links << {first_key => new_terminal_node}
     end
@@ -84,7 +84,7 @@ class Node
     word_count = 0
     word_count += 1 if terminal
     if links.any?
-      word_count += links.map {|link| link.values.first.count}.reduce(:+)
+      word_count += links.map {|link| node_of(link).count}.reduce(:+)
     end
     word_count 
   end
@@ -100,14 +100,16 @@ class Node
 
   def suggest(word = "")
     keys = keys_array(word)
-    go_to_node_of_prefix_end(word, keys)
+    if keys.empty?
+      traverse_links(word)
+    else
+      go_to_node_of_prefix_end(word, keys)
+    end
   end
   
   def go_to_node_of_prefix_end(word, keys)
-    first_key = keys.shift
-    if first_key.nil?
-      traverse_links(word)
-    elsif keys.empty?
+    first_key = keys.shift 
+    if keys.empty?
       empty_key_decision(first_key, word)
     elsif key_already_inserted?(first_key)
       next_node(first_key).go_to_node_of_prefix_end(word, keys)
@@ -127,20 +129,32 @@ class Node
   def traverse_links(word)
     suggestions = []
     suggestions << word if leaf? or intermediate_word?
-    if links.any? 
-      links.each do |link|
-        suggestions << link.values.first.collect_words(word, link)
-      end
-    end
+    add_words_to_suggestions(word, suggestions)
     suggestions.flatten
   end
-  
+
+  def add_words_to_suggestions(word, suggestions) 
+    if links.any? 
+      links.each do |link|
+        suggestions << node_of(link).collect_words(word, link)
+      end
+    end
+  end
+
   def collect_words(word, words = [], link)
-    word += link.keys.first
+    word += letter_of(link)
     add_leaf?(word, words)
-    add_intermediate_word?(word, words)
-    link.values.first.links.each {|link| link.values.first.collect_words(word, words, link)}.compact.flatten
+    words << word if intermediate_word?
+    node_of(link).links.each {|link| node_of(link).collect_words(word, words, link)}
     words
+  end
+
+  def leaf?
+    terminal && links.empty?
+  end
+
+  def intermediate_word?
+    terminal && links.any?
   end
 
   def add_leaf?(word, words)
@@ -150,9 +164,7 @@ class Node
     end
   end
 
-  def add_intermediate_word?(word, words)
-    words << word if intermediate_word?
-  end
+  
 
 
 end
