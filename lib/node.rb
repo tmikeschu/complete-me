@@ -107,20 +107,10 @@ class Node
     else
       suggestions = go_to_node_of_substring_end(word, keys)
     end
-    weight_assessment(word, suggestions)
     suggestions
   end
 
-  def weight_assessment(word, suggestions)
-    binding.pry
-    frequent_substrings = frequent_picks.map {|hot_item| letter_of(hot_item)}
-    if frequent_substrings.include?(word)
-      frequent_pick = suggestions.find {|suggestion| suggestion == frequent_picks.find {|pick| pick.keys.first == word}.values.first}
-    
-    else
-      suggestions
-    end
-  end
+ 
   
   def go_to_node_of_substring_end(word, keys)
     first_key = keys.shift 
@@ -172,8 +162,5 @@ class Node
     terminal && links.any?
   end
 
-  def select(substring, choice)
-    frequent_picks << {substring => choice}
-  end
 
 end
