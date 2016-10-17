@@ -22,4 +22,8 @@ class CompleteMe
     root.suggest(word)
   end
 
+  def select(substring, word)
+    root.select(substring, word)
+  end
+
 end
