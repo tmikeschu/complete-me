@@ -105,7 +105,20 @@ class Node
     if keys.empty?
       traverse_links(word)
     else
-      go_to_node_of_substring_end(word, keys)
+      suggestions = go_to_node_of_substring_end(word, keys)
+    end
+    weight_assessment(word, suggestions)
+    suggestions
+  end
+
+  def weight_assessment(word, suggestions)
+    binding.pry
+    frequent_substrings = frequent_picks.map {|hot_item| letter_of(hot_item)}
+    if frequent_substrings.include?(word)
+      frequent_pick = suggestions.find {|suggestion| suggestion == frequent_picks.find {|pick| pick.keys.first == word}.values.first}
+    
+    else
+      suggestions
     end
   end
   

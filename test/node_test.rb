@@ -184,7 +184,9 @@ class NodeTest < Minitest::Test
     root.insert("pizza")
     root.insert("pizzeria")
     suggestions = root.suggest("piz")
-    assert root.select("piz", "pizzeria")
+    assert_equal ["pizza", "pizzeria"], suggestions 
+    root.select("piz", "pizzeria")
+    assert_equal ["pizzeria", "pizza"]
   end
 
 end
