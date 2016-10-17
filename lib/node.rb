@@ -53,7 +53,7 @@ class Node
   end
 
   def already_inserted_keys
-    inserted_keys = links.map { |link| link.keys.first}
+    inserted_keys = links.map { |link| letter_of(link)}
   end
 
   def next_node(first_key)
@@ -101,6 +101,7 @@ class Node
   end
 
   def suggest(word = "")
+    #binding.pry 
     keys = keys_array(word)
     if keys.empty?
       traverse_links(word)
@@ -110,6 +111,7 @@ class Node
   end
   
   def go_to_node_of_substring_end(word, keys)
+    #binding.pry 
     first_key = keys.shift 
     if keys.empty?
       empty_key_decision(first_key, word)
@@ -120,7 +122,7 @@ class Node
     end
   end
 
-  def empty_key_decision(first_key, word)
+  def empty_key_decision(first_key, word) 
     if key_already_inserted?(first_key)
       next_node(first_key).traverse_links(word)
     else 
@@ -130,22 +132,23 @@ class Node
 
   def traverse_links(word)
     suggestions = []
-    suggestions << word if leaf? or intermediate_word?
-    add_words_to_suggestions(word, suggestions)
+    if leaf?
+      suggestions << word
+    else
+      add_words_to_suggestions(word, suggestions)
+    end
     suggestions.flatten
   end
 
   def add_words_to_suggestions(word, suggestions) 
     if links.any? 
-      #links.each do |link|
       suggestions << collect_words(word)
-      #end
     end
   end
 
-  def collect_words(word, words = [], letter = "")
+  def collect_words(word, words = [], letter = "")    
     word  += letter
-    words << word if leaf? or intermediate_word? 
+    words << word if intermediate_word? or leaf? 
     links.each {|link| node_of(link).collect_words(word, words, letter_of(link))}
     words
   end
