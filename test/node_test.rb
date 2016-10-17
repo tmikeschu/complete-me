@@ -72,16 +72,14 @@ class NodeTest < Minitest::Test
     assert_equal 2, root.count
   end 
 
-  def test_it_counts_all_inserted_words
+  def test_count_increases_with_each_insert
     root = Node.new
     root.insert("car")
-    root.insert("cartel")
-    root.insert("flower")
-    assert_equal 3, root.count
-    root.insert("flee")
-    root.insert("apple")
+    assert_equal 1, root.count
     root.insert("application")    
-    assert_equal 6, root.count
+    assert_equal 2, root.count
+    root.insert("buzz")
+    assert_equal 3, root.count
   end
 
   def test_it_populates_newline_separated_list
@@ -146,6 +144,11 @@ class NodeTest < Minitest::Test
     assert_equal suggestions, root.suggest("").sort
   end
 
+  def test_suggests_nothing_if_dictionary_empty
+    root = Node.new
+    assert_equal "There are no words to suggest", root.suggest("hello")
+  end
+
   def test_it_returns_message_if_argument_does_not_have_suggestions
     root = Node.new
     root.insert("casts")
@@ -157,6 +160,12 @@ class NodeTest < Minitest::Test
     root.insert("casts")
     root.insert("candy")
     assert_equal ["candy"], root.suggest("can")
+  end
+
+  def test_it_suggests_only_word_with_full_argument_as_other_substring
+    root = Node.new
+    root.insert("casts")
+    root.insert("candy")
     assert_equal ['casts'], root.suggest("cas")
   end
 
@@ -176,6 +185,17 @@ class NodeTest < Minitest::Test
     root.insert("pizzazz")
     piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
     assert_equal piz_words, root.suggest('piz')
+  end
+
+  def test_it_suggests_all_words_with_other_exact_argument_substring
+    root = Node.new
+    root.insert("pizza")
+    root.insert("ploy")
+    root.insert("pizzeria")
+    root.insert("ivory")
+    root.insert("pizzicato")
+    root.insert("pizzazz")
+    piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
     assert_equal piz_words.first(2), root.suggest("pizza")
   end
 
