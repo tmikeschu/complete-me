@@ -2,11 +2,13 @@ require 'pry'
 
 class Node
   attr_accessor :links,
-                :terminal
+                :terminal,
+                :frequent_picks
 
   def initialize(terminal = false)
-    @links = []
-    @terminal = terminal
+    @links          = []
+    @frequent_picks = []
+    @terminal       = terminal
   end
 
   def keys_array(keys)
@@ -27,7 +29,7 @@ class Node
 
   def insert(keys)
     return nil if keys.nil? or keys.empty?
-    keys = keys_array(keys)
+    keys        = keys_array(keys)
     first_key   = keys.shift
     insert_decision(first_key, keys)
   end
@@ -59,14 +61,14 @@ class Node
   end
 
   def link_of_key(first_key)
-    links.find {|link| letter_of(link) == first_key}
+    links.find { |link| letter_of(link) == first_key }
   end
   
   def add_link_or_flip_terminal_switch?(first_key)
     if key_already_inserted?(first_key)
       node_of(link_of_key(first_key)).terminal = true
     else
-      @links << {first_key => new_terminal_node}
+      @links << { first_key => new_terminal_node }
     end
   end
 
@@ -76,15 +78,15 @@ class Node
 
   def add_link_and_move_to_next_key(first_key, keys)
       new_node = Node.new
-      @links << {first_key => new_node}
+      @links << { first_key => new_node }
       new_node.insert(keys)
   end
 
   def count
-    word_count = 0
+    word_count  = 0
     word_count += 1 if terminal
     if links.any?
-      word_count += links.map {|link| node_of(link).count}.reduce(:+)
+      word_count += links.map { |link| node_of(link).count }.reduce(:+)
     end
     word_count 
   end
@@ -142,7 +144,7 @@ class Node
   end
 
   def collect_words(word, words = [], link)
-    word += letter_of(link)
+    word  += letter_of(link)
     words << word if intermediate_word?
     words << word if leaf?
     node_of(link).links.each {|link| node_of(link).collect_words(word, words, link)}
@@ -158,7 +160,7 @@ class Node
   end
 
   def select(substring, choice)
-    
+    frequent_picks << {substring => choice}
   end
 
 end
