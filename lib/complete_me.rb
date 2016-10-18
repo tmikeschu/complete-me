@@ -23,16 +23,23 @@ class CompleteMe
 
   def suggest(word = "")
     if library.keys.include?(word)
-      check_library_for_similar_substrings(word)
+      generate_weighted_list_of_suggestions(word)
     else
       root.suggest(word)
     end
   end
 
-  def check_library_for_similar_substrings(word)
-      #binding.pry
-      substring_selections = suggestions_sorted_by_weight(word)
-      substring_selections.to_a + check_library_for_similar_substrings(word.chop).to_a unless word.length.zero?
+  def generate_weighted_list_of_suggestions(substring)
+    similar = weighted_list_of_similar_substrings(similar_substrings(substring))
+    suggestions_sorted_by_weight(substring) + similar
+  end
+
+  def similar_substrings(substring)
+    library.keys.find_all {|sub| sub[0] == substring[0]} - [substring]
+  end
+
+  def weighted_list_of_similar_substrings(similar_substrings)
+    similar_substrings.map {|substring| suggestions_sorted_by_weight(substring)}.flatten
   end
 
   def select(substring, word)
@@ -57,7 +64,6 @@ class CompleteMe
   
 
   def suggestions_sorted_by_weight(substring)
-    #binding.pry
     if library[substring]
       sorted = library[substring].sort_by {|word, val| val}.reverse
       sorted.map!{|pair| pair.first}

@@ -119,6 +119,33 @@ class CompleteMeTest < Minitest::Test
     assert_equal ["pizzeria", "pizza", "pizzle"], completion.suggest("piz")    
   end
 
+  def test_it_can_find_similar_substrings_in_library
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizza")
+    completion.select("p", "pizzle")
+    assert_equal  ["pi", "p"], completion.similar_substrings("piz")
+  end
+
   def test_it_appends_weighted_words_of_substring_with_one_more_character
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizzle")
+    assert_equal ["pizza", "pizzle", "pizzeria" ], completion.suggest("pi")    
+  end
+
+  def test_it_appends_weighted_words_of_substring_sorted_by_weight
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizzle")
+    assert_equal ["pizza", "pizzle", "pizzeria"], completion.suggest("pi")    
   end
 end
