@@ -1,4 +1,3 @@
-
 require './lib/node'
 
 class CompleteMe
