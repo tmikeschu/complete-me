@@ -13,6 +13,40 @@ class NodeTest < Minitest::Test
     assert Node.new
   end
 
+  def test_it_initializes_with_empty_links_array
+    root = Node.new
+    assert_equal [], root.links
+  end
+
+  def test_it_initializes_with_terminal_as_false
+    root = Node.new
+    assert_equal false, root.terminal
+  end
+
+  def test_it_turns_words_to_array
+    root = Node.new
+    result = root.word_characters("pizza")
+    assert_equal ["p","i","z","z","a"], result
+  end
+
+  def test_it_does_nothing_with_array
+    root = Node.new
+    result = root.word_characters(["p","i","z","z","a"])
+    assert_equal ["p","i","z","z","a"], result
+  end
+
+  def test_node_of_accesses_node_of_link_hash
+    root = Node.new
+    result = root.node_of({"letter" => "node"})
+    assert_equal "node", result
+  end
+
+  def test_letter_of_accesses_letter_of_link_hash
+    root = Node.new
+    result = root.letter_of({"letter" => "node"})
+    assert_equal "letter", result
+  end
+
   def test_it_returns_nothing_if_empty_key_inserted
     root = Node.new
     assert_nil root.insert("")

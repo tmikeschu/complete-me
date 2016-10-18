@@ -9,11 +9,11 @@ class Node
     @terminal       = terminal
   end
 
-  def keys_array(keys)
-    if keys.is_a? String
-      keys.chars
+  def word_characters(word)
+    if word.is_a? String
+      word.chars
     else
-      keys
+      word
     end
   end
 
@@ -25,48 +25,47 @@ class Node
     link.keys.first
   end
 
-  def insert(keys)
-    return if keys.empty? or keys.nil?
-    keys        = keys_array(keys)
-    first_key   = keys.shift
-    insert_decision(first_key, keys)
+  def insert(word)
+    return if word.empty? or word.nil?
+    characters = word_characters(word)
+    insert_decision(characters.shift, characters)
   end
   
-  def insert_decision(first_key, keys)
-    if keys.empty?
-      add_link_or_flip_terminal_switch?(first_key)
-    elsif key_already_inserted?(first_key)
-      next_node(first_key).insert(keys)
+  def insert_decision(first_char, characters)
+    if characters.empty?
+      add_link_or_flip_terminal_switch?(first_char)
+    elsif char_already_inserted?(first_char)
+      next_node(first_char).insert(characters)
     else
-      add_link_and_move_to_next_key(first_key, keys)
+      add_link_and_move_to_next_char(first_char, characters)
     end
   end
 
-  def key_already_inserted?(first_key)
+  def char_already_inserted?(first_char)
     if links.any?
-      already_inserted_keys.include?(first_key)
+      already_inserted_characters.include?(first_char)
     else
       false
     end
   end
 
-  def already_inserted_keys
-    inserted_keys = links.map { |link| letter_of(link)}
+  def already_inserted_characters
+    links.map { |link| letter_of(link)}
   end
 
-  def next_node(first_key)
-    node_of(link_of_key(first_key))
+  def next_node(first_char)
+    node_of(link_of_char(first_char))
   end
 
-  def link_of_key(first_key)
-    links.find { |link| letter_of(link) == first_key }
+  def link_of_char(first_char)
+    links.find { |link| letter_of(link) == first_char }
   end
   
-  def add_link_or_flip_terminal_switch?(first_key)
-    if key_already_inserted?(first_key)
-      node_of(link_of_key(first_key)).terminal = true
+  def add_link_or_flip_terminal_switch?(first_char)
+    if char_already_inserted?(first_char)
+      next_node(first_char).terminal = true
     else
-      @links << { first_key => new_terminal_node }
+      @links << { first_char => new_terminal_node }
     end
   end
 
@@ -74,10 +73,10 @@ class Node
     Node.new(terminal = true)
   end
 
-  def add_link_and_move_to_next_key(first_key, keys)
+  def add_link_and_move_to_next_char(first_char, characters)
       new_node = Node.new
-      @links << { first_key => new_node }
-      new_node.insert(keys)
+      @links << { first_char => new_node }
+      new_node.insert(characters)
   end
 
   def count
@@ -100,31 +99,29 @@ class Node
 
   def suggest(word = "")
     #binding.pry 
-    keys = keys_array(word)
-    if keys.empty?
+    characters = word_characters(word)
+    if characters.empty?
       traverse_links(word)
     else
-      go_to_node_of_substring_end(word, keys)
+      go_to_node_of_substring_end(word, characters)
     end
   end
 
  
   
-  def go_to_node_of_substring_end(word, keys)
+  def go_to_node_of_substring_end(word, characters)
     #binding.pry 
-    first_key = keys.shift 
-    if keys.empty?
-      empty_key_decision(first_key, word)
-    elsif key_already_inserted?(first_key)
-      next_node(first_key).go_to_node_of_substring_end(word, keys)
-    else
+    first_char = characters.shift 
+    if characters.empty?
+      empty_char_decision(first_char, word)
+    elsif char_already_inserted?(first_char)
+      next_node(first_char).go_to_node_of_substring_end(word, characters)
     end
   end
 
-  def empty_key_decision(first_key, word) 
-    if key_already_inserted?(first_key)
-      next_node(first_key).traverse_links(word)
-    else 
+  def empty_char_decision(first_char, word) 
+    if char_already_inserted?(first_char)
+      next_node(first_char).traverse_links(word) 
     end
   end
 

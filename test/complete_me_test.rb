@@ -100,11 +100,22 @@ class CompleteMeTest < Minitest::Test
     assert_equal ["computer", "coming","commuter"], completion.suggest("com")
   end
 
-  def test_suggest_returns_library_hash_values_and_other_trie_suggestions_from_dictionary
+  def test_suggest_returns_one_library_hash_value_and_other_trie_suggestion_from_dictionary
+    skip
     dictionary = File.read("/usr/share/dict/words")
     result = completion.populate(dictionary)
     completion.select("piz", "pizzeria")
     assert_equal ["pizzeria", "pize", "pizza", "pizzicato", "pizzle"],completion.suggest("piz")
   end
+  
+  def test_suggest_returns_two_library_hash_values_and_other_trie_suggestion_from_dictionary
+    skip
+    dictionary = File.read("/usr/share/dict/words")
+    result = completion.populate(dictionary)
+    completion.select("piz", "pizzle")
+    completion.select("piz", "pizzeria")
+    assert_equal ["pizzeria", "pizzle", "pize", "pizza", "pizzicato"], completion.suggest("piz")
+  end
+
 
 end
