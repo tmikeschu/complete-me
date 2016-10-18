@@ -74,7 +74,7 @@ class CompleteMeTest < Minitest::Test
 
   def test_it_knows_how_to_add_word_or_increase_word_count_in_existing_substring_in_library
     completion.select("com", "computer")
-    completion.increment_word_count("com", "computer")
+    completion.add_new_word_or_increment_wordcount("com", "computer")
     assert_equal ({"computer" => 2}), completion.library["com"]
   end
 
@@ -82,7 +82,7 @@ class CompleteMeTest < Minitest::Test
     completion.select("com", "coming")  
     completion.select("com", "computer")
     completion.select("com", "computer")
-    assert_equal ["computer", "coming"], completion.sort_suggestions_by_weight("com")
+    assert_equal ["computer", "coming"], completion.suggestions_sorted_by_weight("com")
   end
 
   def test_suggest_returns_library_hash_values_if_substring_in_library
@@ -97,7 +97,28 @@ class CompleteMeTest < Minitest::Test
     completion.select("com", "coming")  
     completion.select("com", "computer")
     completion.select("com", "computer")
-    assert_equal ["computer", "coming", "commuter"], completion.suggest("com")
+    assert_equal ["computer", "coming"], completion.suggest("com")
   end
 
+  def test_it_appends_weighted_words_of_substring_with_one_less_character
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizzicato")
+    assert_equal ["pizzeria", "pizza", "pizzicato"], completion.suggest("piz")    
+  end
+  def test_it_appends_weighted_words_of_substring_with_multiple_less_characters
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("piz", "pizzeria")
+    completion.select("pi", "pizza")
+    completion.select("pi", "pizza")
+    completion.select("p", "pizzle")
+    assert_equal ["pizzeria", "pizza", "pizzle"], completion.suggest("piz")    
+  end
+
+  def test_it_appends_weighted_words_of_substring_with_one_more_character
+  end
 end
