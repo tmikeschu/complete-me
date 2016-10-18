@@ -8,6 +8,7 @@ require 'pry'
 class CompleteMeTest < Minitest::Test
 
   attr_reader   :completion
+
   def setup
     @completion = CompleteMe.new
   end
@@ -47,5 +48,39 @@ class CompleteMeTest < Minitest::Test
     suggestion = completion.suggest("piz")
     assert_equal ["pizza", "pizzaria"], suggestion
   end
+
+  def test_it_initializes_with_empty_library
+    assert completion.library.empty?
+  end
+
+  def test_select_adds_hash_to_library
+    completion.select("com", "computer")
+    assert_equal ({"computer" => 1}), completion.library["com"]   
+  end  
   
+  def test_selecting_increases_word_weight_for_substring_key
+    completion.select("com", "computer")
+    assert_equal ({"computer" => 1}), completion.library["com"]
+    completion.select("com", "computer")
+    assert_equal ({"computer" => 2}), completion.library["com"]
+  end 
+
+  def test_set_new_hash_adds_substring_pointing_to_word_and_count_hash_in_library
+    completion.add_substring_and_string_to_library("com", "computer")
+    assert_equal ({"computer" => 1}), completion.library["com"]       
+  end
+
+  def test_it_knows_how_to_add_word_or_increase_word_count_in_existing_substring_in_library
+    completion.select("com", "computer")
+    completion.increment_word_count("com", "computer")
+    assert_equal ({"computer" => 2}), completion.library["com"]
+  end
+
+  def test_it_can_sort_substring_values_by_weight 
+    completion.select("com", "computer")
+    completion.select("com", "computer")
+    completion.select("com", "coming")  
+    assert_equal ["computer", "coming"], completion.sort_suggestions_by_weight("com")
+  end
+
 end

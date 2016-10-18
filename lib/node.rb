@@ -3,6 +3,7 @@ require 'pry'
 class Node
   attr_accessor :links,
                 :terminal
+                
   def initialize(terminal = false)
     @links          = []
     @terminal       = terminal
