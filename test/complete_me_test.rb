@@ -97,55 +97,14 @@ class CompleteMeTest < Minitest::Test
     completion.select("com", "coming")  
     completion.select("com", "computer")
     completion.select("com", "computer")
-    assert_equal ["computer", "coming"], completion.suggest("com")
+    assert_equal ["computer", "coming","commuter"], completion.suggest("com")
   end
 
-  def test_it_appends_weighted_words_of_substring_with_one_less_character
+  def test_suggest_returns_library_hash_values_and_other_trie_suggestions_from_dictionary
+    dictionary = File.read("/usr/share/dict/words")
+    result = completion.populate(dictionary)
     completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizzicato")
-    assert_equal ["pizzeria", "pizza", "pizzicato"], completion.suggest("piz")    
-  end
-  def test_it_appends_weighted_words_of_substring_with_multiple_less_characters
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizza")
-    completion.select("p", "pizzle")
-    assert_equal ["pizzeria", "pizza", "pizzle"], completion.suggest("piz")    
+    assert_equal ["pizzeria", "pize", "pizza", "pizzicato", "pizzle"],completion.suggest("piz")
   end
 
-  def test_it_can_find_similar_substrings_in_library
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizza")
-    completion.select("p", "pizzle")
-    assert_equal  ["pi", "p"], completion.similar_substrings("piz")
-  end
-
-  def test_it_appends_weighted_words_of_substring_with_one_more_character
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizzle")
-    assert_equal ["pizza", "pizzle", "pizzeria" ], completion.suggest("pi")    
-  end
-
-  def test_it_appends_weighted_words_of_substring_sorted_by_weight
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("piz", "pizzeria")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizza")
-    completion.select("pi", "pizzle")
-    assert_equal ["pizza", "pizzle", "pizzeria"], completion.suggest("pi")    
-  end
 end

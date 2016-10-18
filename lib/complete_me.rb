@@ -15,7 +15,7 @@ class CompleteMe
 
   def count
     root.count
- end
+  end
 
   def populate(converted_file)
     root.populate(converted_file)
@@ -23,23 +23,10 @@ class CompleteMe
 
   def suggest(word = "")
     if library.keys.include?(word)
-      generate_weighted_list_of_suggestions(word)
+      (suggestions_sorted_by_weight(word) + root.suggest(word).to_a).uniq
     else
       root.suggest(word)
     end
-  end
-
-  def generate_weighted_list_of_suggestions(substring)
-    similar = weighted_list_of_similar_substrings(similar_substrings(substring))
-    suggestions_sorted_by_weight(substring) + similar
-  end
-
-  def similar_substrings(substring)
-    library.keys.find_all {|sub| sub[0] == substring[0]} - [substring]
-  end
-
-  def weighted_list_of_similar_substrings(similar_substrings)
-    similar_substrings.map {|substring| suggestions_sorted_by_weight(substring)}.flatten
   end
 
   def select(substring, word)
@@ -61,13 +48,10 @@ class CompleteMe
       library[substring][word] = 1 
     end
   end
-  
 
   def suggestions_sorted_by_weight(substring)
-    if library[substring]
       sorted = library[substring].sort_by {|word, val| val}.reverse
       sorted.map!{|pair| pair.first}
-    end
   end
 
 end
