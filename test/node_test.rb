@@ -15,7 +15,7 @@ class NodeTest < Minitest::Test
 
   def test_it_returns_nothing_if_empty_key_inserted
     root = Node.new
-    refute root.insert("")
+    assert_nil root.insert("")
   end
 
   def test_it_inserts_one_key

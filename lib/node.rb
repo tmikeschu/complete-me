@@ -26,7 +26,8 @@ class Node
   end
 
   def insert(keys)
-     keys        = keys_array(keys)
+    return if keys.empty? or keys.nil?
+    keys        = keys_array(keys)
     first_key   = keys.shift
     insert_decision(first_key, keys)
   end
