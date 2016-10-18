@@ -118,7 +118,6 @@ class Node
     elsif key_already_inserted?(first_key)
       next_node(first_key).go_to_node_of_substring_end(word, keys)
     else
-      "There are no words to suggest"      
     end
   end
 
@@ -126,7 +125,6 @@ class Node
     if key_already_inserted?(first_key)
       next_node(first_key).traverse_links(word)
     else 
-      "There are no words to suggest"
     end
   end
 

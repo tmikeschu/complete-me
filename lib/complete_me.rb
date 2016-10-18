@@ -22,7 +22,17 @@ class CompleteMe
   end
 
   def suggest(word = "")
-    root.suggest(word)
+    if library.keys.include?(word)
+      weighted = sort_suggestions_by_weight(word)
+      others = root.suggest(word)
+      if others
+        weighted + others
+      else
+        weighted
+      end 
+    else
+      root.suggest(word)
+    end
   end
 
   def select(substring, word)
@@ -34,19 +44,20 @@ class CompleteMe
   end
 
   def add_substring_and_string_to_library(substring, word)
-    library[substring] = {word => 1}
+      library[substring] = {word => 1}    
   end
 
   def increment_word_count(substring, word)
     if library[substring][word]
       library[substring][word] += 1
     else
-      add_substring_and_string_to_library(substring, word)    
+      library[substring][word] = 1 
     end
   end
 
   def sort_suggestions_by_weight(substring)
-  
+    sorted = library[substring].sort_by {|word, val| val}.reverse
+    sorted.map!{|pair| pair.first}
   end
 
 end

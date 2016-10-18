@@ -146,13 +146,13 @@ class NodeTest < Minitest::Test
 
   def test_suggests_nothing_if_dictionary_empty
     root = Node.new
-    assert_equal "There are no words to suggest", root.suggest("hello")
+    assert_nil root.suggest("hello")
   end
 
   def test_it_returns_message_if_argument_does_not_have_suggestions
     root = Node.new
     root.insert("casts")
-    assert_equal "There are no words to suggest", root.suggest("fi")
+    assert_nil root.suggest("fi")
   end
 
   def test_it_suggests_only_word_with_full_argument_as_substring

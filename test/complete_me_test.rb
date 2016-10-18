@@ -79,10 +79,25 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_it_can_sort_substring_values_by_weight 
-    completion.select("com", "computer")
-    completion.select("com", "computer")
     completion.select("com", "coming")  
+    completion.select("com", "computer")
+    completion.select("com", "computer")
     assert_equal ["computer", "coming"], completion.sort_suggestions_by_weight("com")
+  end
+
+  def test_suggest_returns_library_hash_values_if_substring_in_library
+    completion.select("com", "coming")  
+    completion.select("com", "computer")
+    completion.select("com", "computer")
+    assert_equal ["computer", "coming"], completion.suggest("com")
+  end
+
+  def test_suggest_returns_library_hash_values_and_other_trie_suggestions_after
+    completion.insert("commuter")
+    completion.select("com", "coming")  
+    completion.select("com", "computer")
+    completion.select("com", "computer")
+    assert_equal ["computer", "coming", "commuter"], completion.suggest("com")
   end
 
 end
