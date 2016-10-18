@@ -5,7 +5,7 @@ class Node
                 :terminal
                 
   def initialize(terminal = false)
-    @links          = []
+    @links          = {}
     @terminal       = terminal
   end
 
@@ -15,14 +15,6 @@ class Node
     else
       word
     end
-  end
-
-  def node_of(link)
-    link.values.first
-  end
-
-  def letter_of(link)
-    link.keys.first
   end
 
   def insert(word)
@@ -35,7 +27,7 @@ class Node
     if characters.empty?
       add_link_or_flip_terminal_switch?(first_char)
     elsif char_already_inserted?(first_char)
-      next_node(first_char).insert(characters)
+      links[first_char].insert(characters)
     else
       add_link_and_move_to_next_char(first_char, characters)
     end
@@ -43,29 +35,17 @@ class Node
 
   def char_already_inserted?(first_char)
     if links.any?
-      already_inserted_characters.include?(first_char)
+      links.keys.include?(first_char)
     else
       false
     end
   end
-
-  def already_inserted_characters
-    links.map { |link| letter_of(link)}
-  end
-
-  def next_node(first_char)
-    node_of(link_of_char(first_char))
-  end
-
-  def link_of_char(first_char)
-    links.find { |link| letter_of(link) == first_char }
-  end
   
   def add_link_or_flip_terminal_switch?(first_char)
     if char_already_inserted?(first_char)
-      next_node(first_char).terminal = true
+      links[first_char].terminal = true
     else
-      @links << { first_char => new_terminal_node }
+      @links[first_char] = new_terminal_node
     end
   end
 
@@ -75,7 +55,7 @@ class Node
 
   def add_link_and_move_to_next_char(first_char, characters)
       new_node = Node.new
-      @links << { first_char => new_node }
+      @links[first_char] = new_node
       new_node.insert(characters)
   end
 
@@ -115,13 +95,13 @@ class Node
     if characters.empty?
       empty_char_decision(first_char, word)
     elsif char_already_inserted?(first_char)
-      next_node(first_char).go_to_node_of_substring_end(word, characters)
+      links[first_char].go_to_node_of_substring_end(word, characters)
     end
   end
 
   def empty_char_decision(first_char, word) 
     if char_already_inserted?(first_char)
-      next_node(first_char).traverse_links(word) 
+      links[first_char].traverse_links(word) 
     end
   end
 
