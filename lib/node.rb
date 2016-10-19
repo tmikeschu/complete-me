@@ -95,7 +95,6 @@ class Node
   def go_to_node_of_substring_end(word, characters)
     first_char = characters.shift 
     if characters.empty?
-      # binding.pry
       empty_char_decision(first_char, word)
     elsif char_already_inserted?(first_char)
       links[first_char].go_to_node_of_substring_end(word, characters)
@@ -103,10 +102,8 @@ class Node
   end
 
   def empty_char_decision(first_char, word)
-    # binding.pry
     if char_already_inserted?(first_char)
       links[first_char].gather_suggestions(word) 
-      # binding.pry
     end
   end
 
@@ -117,7 +114,7 @@ class Node
     else
       add_words_to_suggestions(word, suggestions)
     end
-    # binding.pry
+     
     suggestions.flatten
   end
 
@@ -127,7 +124,7 @@ class Node
     end
   end
 
-  def collect_words(word, words = [], letter = "")    
+  def collect_words(word, words = [], letter = "") 
     word  += letter
     words << word if intermediate_word? or leaf? 
     links.each {|letter, node| node.collect_words(word, words, letter)}

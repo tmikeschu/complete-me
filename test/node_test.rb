@@ -1,5 +1,5 @@
-require 'simplecov'
-SimpleCov.start
+# require 'simplecov'
+# SimpleCov.start
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
 require 'minitest/pride'
@@ -133,10 +133,10 @@ class NodeTest < Minitest::Test
     assert_equal 235886, root.count
   end
 
-  # def test_it_suggests_only_word_if_empty_argument_passed
-  #   root.insert("casts")
-  #   assert_equal ["casts"], root.suggest("")
-  # end
+  def test_it_suggests_only_word_if_empty_argument_passed
+    root.insert("casts")
+    assert_equal ["casts"], root.suggest("")
+  end
 
   def test_it_goes_to_node_of_substring_end
     root.insert("bob")
@@ -144,96 +144,127 @@ class NodeTest < Minitest::Test
     assert_equal ["bob"], result
   end
 
-  # def test_it_gathers_a_suggestion_list_for_
-  #   root.insert("bob")
-  #   assert_equal ["bob"], root.gather_suggestions("")
-  # end
+  def test_it_makes_empty_character_decision
+    root.insert("bob")
+    result = root.empty_char_decision("b", "b")
+    assert_equal ["bob"], result
+  end
 
-  # def test_it_suggests_intermediate_word_too_if_empty_argument_passed
-  #   root.insert("casts")
-  #   root.insert("cast")
-  #   assert_equal ["cast", "casts"], root.suggest("")
-  # end
+  def test_it_gathers_a_suggestion_list_for_empty_substring
+    root.insert("bob")
+    assert_equal ["bob"], root.gather_suggestions("")
+  end
 
-  # def test_it_suggests_intermediate_words_too_if_empty_argument_passed
-  #   root.insert("casts")
-  #   root.insert("cast")
-  #   root.insert("cas")
-  #   assert_equal ["cas", "cast", "casts"], root.suggest("")
-  # end
+  def test_adds_word_to_suggestion_list
+    root.insert("p")
+    result = root.add_words_to_suggestions("", [])
+    assert_equal [["p"]], result 
+  end
 
-  # def test_it_suggests_all_of_two_words_if_no_argument_passed
-  #   root.insert("casts")
-  #   root.insert("boat")
-  #   assert_equal ["boat", "casts"], root.suggest("").sort
-  # end
+  def test_it_collects_words_in_a_list_for_empty_substring
+    root.insert("bob")
+    result = root.collect_words("")
+    assert_equal ["bob"], result 
+  end
 
-  # def test_it_suggests_all_words_if_no_argument_passed
-  #   root.insert("casts")
-  #   root.insert("boat")
-  #   root.insert("blow")
-  #   root.insert("try")
-  #   root.insert("tremendous")
-  #   root.insert("used")
-  #   root.insert("flower")
-  #   suggestions = ["blow", "boat", "casts", "flower", "tremendous", "try", "used"]
-  #   assert_equal suggestions, root.suggest("").sort
-  # end
+  def test_it_checks_for_a_leaf
+    root.insert("b")
+    result = root.links.values.first.leaf?
+    assert result
+  end
 
-  # def test_suggests_nothing_if_dictionary_empty
-  #   root = Node.new
-  #   assert_nil root.suggest("hello")
-  # end
+  def test_it_checks_for_an_intermediate_word
+    root.insert("b")
+    root.insert("bob")
+    result = root.links.values.first.intermediate_word?
+    assert result
+  end
+  
+  def test_it_suggests_intermediate_word_too_if_empty_argument_passed
+    root.insert("casts")
+    root.insert("cast")
+    assert_equal ["cast", "casts"], root.suggest("")
+  end
 
-  # def test_it_returns_message_if_argument_does_not_have_suggestions
-  #   root = Node.new
-  #   root.insert("casts")
-  #   assert_nil root.suggest("fi")
-  # end
+  def test_it_suggests_intermediate_words_too_if_empty_argument_passed
+    root.insert("casts")
+    root.insert("cast")
+    root.insert("cas")
+    assert_equal ["cas", "cast", "casts"], root.suggest("")
+  end
 
-  # def test_it_suggests_only_word_with_full_argument_as_substring
-  #   root = Node.new
-  #   root.insert("casts")
-  #   root.insert("candy")
-  #   assert_equal ["candy"], root.suggest("can")
-  # end
+  def test_it_suggests_all_of_two_words_if_no_argument_passed
+    root.insert("casts")
+    root.insert("boat")
+    assert_equal ["boat", "casts"], root.suggest("").sort
+  end
 
-  # def test_it_suggests_only_word_with_full_argument_as_other_substring
-  #   root = Node.new
-  #   root.insert("casts")
-  #   root.insert("candy")
-  #   assert_equal ['casts'], root.suggest("cas")
-  # end
+  def test_it_suggests_all_words_if_no_argument_passed
+    root.insert("casts")
+    root.insert("boat")
+    root.insert("blow")
+    root.insert("try")
+    root.insert("tremendous")
+    root.insert("used")
+    root.insert("flower")
+    suggestions = ["blow", "boat", "casts", "flower", "tremendous", "try", "used"]
+    assert_equal suggestions, root.suggest("").sort
+  end
 
-  # def test_it_suggests_argument_if_argument_is_valid_word
-  #   root = Node.new
-  #   root.insert("green")
-  #   assert_equal ["green"], root.suggest("green")
-  # end
+  def test_suggests_nothing_if_dictionary_empty
+    root = Node.new
+    assert_nil root.suggest("hello")
+  end
 
-  # def test_it_suggests_all_words_with_exact_argument_substring
-  #   root = Node.new
-  #   root.insert("pizza")
-  #   root.insert("ploy")
-  #   root.insert("pizzeria")
-  #   root.insert("ivory")
-  #   root.insert("pizzicato")
-  #   root.insert("pizzazz")
-  #   piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
-  #   assert_equal piz_words, root.suggest('piz')
-  # end
+  def test_it_returns_message_if_argument_does_not_have_suggestions
+    root = Node.new
+    root.insert("casts")
+    assert_nil root.suggest("fi")
+  end
 
-  # def test_it_suggests_all_words_with_other_exact_argument_substring
-  #   root = Node.new
-  #   root.insert("pizza")
-  #   root.insert("ploy")
-  #   root.insert("pizzeria")
-  #   root.insert("ivory")
-  #   root.insert("pizzicato")
-  #   root.insert("pizzazz")
-  #   piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
-  #   assert_equal piz_words.first(2), root.suggest("pizza")
-  # end
+  def test_it_suggests_only_word_with_full_argument_as_substring
+    root = Node.new
+    root.insert("casts")
+    root.insert("candy")
+    assert_equal ["candy"], root.suggest("can")
+  end
+
+  def test_it_suggests_only_word_with_full_argument_as_other_substring
+    root = Node.new
+    root.insert("casts")
+    root.insert("candy")
+    assert_equal ['casts'], root.suggest("cas")
+  end
+
+  def test_it_suggests_argument_if_argument_is_valid_word
+    root = Node.new
+    root.insert("green")
+    assert_equal ["green"], root.suggest("green")
+  end
+
+  def test_it_suggests_all_words_with_exact_argument_substring
+    root = Node.new
+    root.insert("pizza")
+    root.insert("ploy")
+    root.insert("pizzeria")
+    root.insert("ivory")
+    root.insert("pizzicato")
+    root.insert("pizzazz")
+    piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
+    assert_equal piz_words, root.suggest('piz')
+  end
+
+  def test_it_suggests_all_words_with_other_exact_argument_substring
+    root = Node.new
+    root.insert("pizza")
+    root.insert("ploy")
+    root.insert("pizzeria")
+    root.insert("ivory")
+    root.insert("pizzicato")
+    root.insert("pizzazz")
+    piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
+    assert_equal piz_words.first(2), root.suggest("pizza")
+  end
 
 
 end
