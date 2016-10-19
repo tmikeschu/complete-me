@@ -63,7 +63,7 @@ class Node
     word_count  = 0
     word_count += 1 if terminal
     if links.any?
-      word_count += links.map { |link| node_of(link).count }.reduce(:+)
+      word_count += links.values.map { |node| node.count }.reduce(:+)
     end
     word_count 
   end
@@ -78,40 +78,40 @@ class Node
   end
 
   def suggest(word = "")
-    #binding.pry 
     characters = word_characters(word)
     if characters.empty?
-      traverse_links(word)
+      gather_suggestions(word)
     else
       go_to_node_of_substring_end(word, characters)
     end
   end
-
- 
   
   def go_to_node_of_substring_end(word, characters)
-    #binding.pry 
     first_char = characters.shift 
     if characters.empty?
+      # binding.pry
       empty_char_decision(first_char, word)
     elsif char_already_inserted?(first_char)
       links[first_char].go_to_node_of_substring_end(word, characters)
     end
   end
 
-  def empty_char_decision(first_char, word) 
+  def empty_char_decision(first_char, word)
+    # binding.pry
     if char_already_inserted?(first_char)
-      links[first_char].traverse_links(word) 
+      links[first_char].gather_suggestions(word) 
+      # binding.pry
     end
   end
 
-  def traverse_links(word)
+  def gather_suggestions(word)
     suggestions = []
     if leaf?
       suggestions << word
     else
       add_words_to_suggestions(word, suggestions)
     end
+    # binding.pry
     suggestions.flatten
   end
 
@@ -124,7 +124,7 @@ class Node
   def collect_words(word, words = [], letter = "")    
     word  += letter
     words << word if intermediate_word? or leaf? 
-    links.each {|link| node_of(link).collect_words(word, words, letter_of(link))}
+    links.each {|letter, node| node.collect_words(word, words, letter)}
     words
   end
 

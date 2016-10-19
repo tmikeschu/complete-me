@@ -52,9 +52,25 @@ class NodeTest < Minitest::Test
     assert_equal ["b"], root.links.keys
   end
 
+  def test_it_inserts_two_letters
+    root.insert("bo")
+    second_link_letter = root.links.values.first.links.keys
+    assert_equal ["o"], second_link_letter
+  end
+
+  def test_it_skips_letters_if_already_inserted
+    root.insert("car")
+    root.insert("carts")
+    assert_equal ["c"], root.links.keys
+  end
+
   def test_it_decides_how_to_handle_word_with_one_letter
     root.insert_decision("a", [])
     assert_equal ["a"], root.links.keys
+  end
+  
+  def test_it_knows_if_character_is_not_inserted
+    refute root.char_already_inserted?("a")
   end
 
   def test_it_knows_when_to_add_links
@@ -70,104 +86,76 @@ class NodeTest < Minitest::Test
     assert root.links["b"].terminal
   end
 
+  def test_new_terminal_node_is_true
+    assert root.new_terminal_node.terminal
+  end
+
   def test_it_can_add_link_and_move_to_the_next_char
     root.add_link_and_move_to_next_char("b", "o")
     assert_equal [["b"], ["o"]], [root.links.keys, root.links.values.first.links.keys]
   end
 
-  def test_it_knows_if_character_is_not_inserted
-    refute root.char_already_inserted?("a")
+  def test_word_count_starts_at_zero_when_no_words_in_trie
+    assert_equal 0, root.count
   end
 
-  def test_it_inserts_two_letters
-    root.insert("bo")
-    second_link_letter = root.links.values.first.links.keys
-    assert_equal ["o"], second_link_letter
+  def test_it_adds_one_to_word_count_if_node_is_terminal
+    root.terminal = true
+    assert_equal 1, root.count
   end
 
-  def test_it_skips_letters_if_already_inserted
+  def test_it_counts_first_inserted_word
     root.insert("car")
-    root.insert("carts")
-    assert_equal ["c"], root.links.keys
+    assert_equal 1, root.count
   end
 
-  # def test_it_flips_intermediate_switch_if_new_insert_ends_within_existing_path
-  #   root = Node.new
-  #   root.insert("carts")
-  #   refute root.next_node("c").next_node("a").next_node("r").terminal
-  #   root.insert("car")
-  #   assert root.next_node("c").next_node("a").next_node("r").terminal
-  # end
+  def test_it_counts_second_inserted_word
+    root.insert("car")
+    root.insert("cartel")
+    assert_equal 2, root.count
+  end 
 
-  # def test_it_adds_one_to_word_count_if_node_is_terminal
-  #   root = Node.new
-  #   refute_equal 1, root.count
-  #   root.terminal = true
-  #   assert_equal 1, root.count
-  # end
+  def test_it_populates_newline_separated_list
+    skip
+    dictionary = File.read("/usr/share/dict/words")
+    assert root.populate(dictionary)
+  end
 
-  # def test_it_returns_word_count_of_zero_if_no_words_inserted
-  #   root = Node.new
-  #   assert_equal 0, root.count
-  # end
+  def test_it_returns_empty_if_file_empty
+    dictionary = ''
+    assert_equal "File empty", root.populate(dictionary) 
+  end    
 
-  # def test_it_counts_first_inserted_word
-  #   root = Node.new
-  #   root.insert("car")
-  #   assert_equal 1, root.count
-  # end
-
-  # def test_it_counts_second_inserted_word
-  #   root = Node.new
-  #   root.insert("car")
-  #   root.insert("cartel")
-  #   assert_equal 2, root.count
-  # end 
-
-  # def test_count_increases_with_each_insert
-  #   root = Node.new
-  #   root.insert("car")
-  #   assert_equal 1, root.count
-  #   root.insert("application")    
-  #   assert_equal 2, root.count
-  # end
-
-  # def test_it_populates_newline_separated_list
-  #   skip
-  #   root = Node.new
-  #   dictionary = File.read("/usr/share/dict/words")
-  #   assert root.populate(dictionary)
-  # end
-
-  # def test_it_returns_empty_if_file_empty
-  #   root = Node.new
-  #   dictionary = ''
-  #   assert_equal "File empty", root.populate(dictionary) 
-  # end    
-
-  # def test_it_counts_all_populated_words
-  #   skip
-  #   root = Node.new
-  #   dictionary = File.read("/usr/share/dict/words")
-  #   root.populate(dictionary)    
-  #   assert_equal 235886, root.count
-  # end
+  def test_it_counts_all_populated_words
+    skip
+    dictionary = File.read("/usr/share/dict/words")
+    root.populate(dictionary)    
+    assert_equal 235886, root.count
+  end
 
   # def test_it_suggests_only_word_if_empty_argument_passed
-  #   root = Node.new
   #   root.insert("casts")
   #   assert_equal ["casts"], root.suggest("")
   # end
 
+  def test_it_goes_to_node_of_substring_end
+    root.insert("bob")
+    result = root.go_to_node_of_substring_end("b", ["b"])
+    assert_equal ["bob"], result
+  end
+
+  # def test_it_gathers_a_suggestion_list_for_
+  #   root.insert("bob")
+  #   assert_equal ["bob"], root.gather_suggestions("")
+  # end
+
   # def test_it_suggests_intermediate_word_too_if_empty_argument_passed
-  #   root = Node.new
   #   root.insert("casts")
   #   root.insert("cast")
   #   assert_equal ["cast", "casts"], root.suggest("")
   # end
 
   # def test_it_suggests_intermediate_words_too_if_empty_argument_passed
-  #   root = Node.new
   #   root.insert("casts")
   #   root.insert("cast")
   #   root.insert("cas")
@@ -175,14 +163,12 @@ class NodeTest < Minitest::Test
   # end
 
   # def test_it_suggests_all_of_two_words_if_no_argument_passed
-  #   root = Node.new
   #   root.insert("casts")
   #   root.insert("boat")
   #   assert_equal ["boat", "casts"], root.suggest("").sort
   # end
 
   # def test_it_suggests_all_words_if_no_argument_passed
-  #   root = Node.new
   #   root.insert("casts")
   #   root.insert("boat")
   #   root.insert("blow")
