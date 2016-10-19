@@ -1,4 +1,5 @@
 require 'pry'
+require 'csv'
 
 class Node
   attr_accessor :links,
@@ -18,7 +19,8 @@ class Node
   end
 
   def insert(word)
-    return if word.empty? or word.nil?
+    word = word.to_s if word.is_a? Integer
+    return if word.to_s.empty? or word.nil?
     characters = word_characters(word)
     insert_decision(characters.shift, characters)
   end
@@ -72,7 +74,11 @@ class Node
     if converted_file.empty?
       "File empty"
     else
-      files_lines = converted_file.split
+      if converted_file.is_a? String
+        files_lines = converted_file.split
+      else
+        files_lines = converted_file
+      end 
       files_lines.each { |line| insert(line) }
     end
   end

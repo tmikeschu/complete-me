@@ -51,10 +51,10 @@ class CompleteMe
 
   def suggestions_sorted_by_weight(substring)
       sorted = library[substring].sort_by {|word, val| val}.reverse
-      retreiving_words(sorted)
+      retreive_words_from_word_weight_list(sorted)
   end
  
-  def retreiving_words(sorted)
+  def retreive_words_from_word_weight_list(sorted)
     sorted.map!{|word_weight_pair| word_weight_pair.first}
   end
 end
