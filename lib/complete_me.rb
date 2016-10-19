@@ -37,7 +37,7 @@ class CompleteMe
     end
   end
 
-  def add_substring_and_string_to_library(substring, word)
+  def add_substring_with_word_to_library(substring, word)
     library[substring] = {word => 1}    
   end
 

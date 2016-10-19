@@ -81,7 +81,7 @@ class CompleteMeTest < Minitest::Test
   end 
 
   def test_set_new_hash_adds_substring_pointing_to_word_and_count_hash_in_library
-    completion.add_substring_and_string_to_library("com", "computer")
+    completion.add_substring_with_word_to_library("com", "computer")
     assert_equal ({"computer" => 1}), completion.library["com"]       
   end
 
