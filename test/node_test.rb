@@ -5,8 +5,6 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/node'
 
-require 'pry'
-
 class NodeTest < Minitest::Test
 
   attr_reader  :root
@@ -121,10 +119,25 @@ class NodeTest < Minitest::Test
     assert root.populate(dictionary)
   end
 
-  def test_it_returns_empty_if_file_empty
+  def test_it_returns_empty_array_if_file_empty
     dictionary = ''
-    assert_equal "File empty", root.populate(dictionary) 
+    assert_equal [], root.populate(dictionary) 
   end    
+
+  def test_it_returns_empty_array_if_file_empty
+    dictionary = nil
+    assert_equal nil, root.populate(dictionary) 
+  end 
+
+  def test_it_converts_a_string_to_an_array
+    result = root.convert_file_to_array_if_string("bob\n joe")
+    assert_equal ["bob", "joe"], result
+  end
+
+  def test_it_inserts_file_lines
+    root.insert_file_lines(["bob", "joe"])
+    assert_equal ["b","j"], root.links.keys
+  end
 
   def test_it_counts_all_populated_words
     skip
@@ -136,6 +149,16 @@ class NodeTest < Minitest::Test
   def test_it_suggests_only_word_if_empty_argument_passed
     root.insert("casts")
     assert_equal ["casts"], root.suggest("")
+  end
+
+  def test_it_decides_if_characters_is_empty
+    root.insert("bob")
+    assert_equal  ["bob"], root.decide_if_characters_empty("", [])
+  end
+
+  def test_it_moves_on_if_characters_not_empty
+    root.insert("bob")
+    assert_equal  ["bob"], root.decide_if_characters_empty("b", ["b"])
   end
 
   def test_it_goes_to_node_of_substring_end
@@ -153,6 +176,16 @@ class NodeTest < Minitest::Test
   def test_it_gathers_a_suggestion_list_for_empty_substring
     root.insert("bob")
     assert_equal ["bob"], root.gather_suggestions("")
+  end
+
+  def test_it_adds_word_to_suggestions_if_word_is_leaf
+    root.insert("b")
+    assert_equal [["b"]], root.decide_if_leaf([], "")
+  end
+
+  def test_it_moves_on_to_add_words_if_not_a_leaf
+    root.insert("bo")
+    assert_equal [["bo"]], root.decide_if_leaf([], "")
   end
 
   def test_adds_word_to_suggestion_list
@@ -265,6 +298,5 @@ class NodeTest < Minitest::Test
     piz_words = ["pizza", 'pizzazz', 'pizzeria', "pizzicato"]
     assert_equal piz_words.first(2), root.suggest("pizza")
   end
-
 
 end

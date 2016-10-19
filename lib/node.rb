@@ -1,4 +1,3 @@
-require 'pry'
 require 'csv'
 
 class Node
@@ -20,7 +19,7 @@ class Node
 
   def insert(word)
     word = word.to_s if word.is_a? Integer
-    return if word.to_s.empty? or word.nil?
+    return if word.empty? or word.nil?
     characters = word_characters(word)
     insert_decision(characters.shift, characters)
   end
@@ -70,21 +69,27 @@ class Node
     word_count 
   end
 
-  def populate(converted_file)
-    if converted_file.empty?
-      "File empty"
-    else
-      if converted_file.is_a? String
-        files_lines = converted_file.split
-      else
-        files_lines = converted_file
-      end 
-      files_lines.each { |line| insert(line) }
+  def populate(file)
+    if file
+      file_lines = convert_file_to_array_if_string(file)
+      insert_file_lines(file_lines)
     end
+  end
+
+  def convert_file_to_array_if_string(file)
+    file.split if file.is_a? String
+  end
+
+  def insert_file_lines(file)
+    file.each { |line| insert(line) }
   end
 
   def suggest(word = "")
     characters = word_characters(word)
+    decide_if_characters_empty(word, characters)
+  end
+
+  def decide_if_characters_empty(word, characters)
     if characters.empty?
       gather_suggestions(word)
     else
@@ -109,19 +114,20 @@ class Node
 
   def gather_suggestions(word)
     suggestions = []
+    decide_if_leaf(suggestions, word)
+    suggestions.flatten
+  end
+
+  def decide_if_leaf(suggestions, word)
     if leaf?
       suggestions << word
     else
       add_words_to_suggestions(word, suggestions)
     end
-     
-    suggestions.flatten
   end
 
   def add_words_to_suggestions(word, suggestions) 
-    if links.any? 
-      suggestions << collect_words(word)
-    end
+    suggestions << collect_words(word) if links.any? 
   end
 
   def collect_words(word, words = [], letter = "") 
@@ -138,6 +144,5 @@ class Node
   def intermediate_word?
     terminal && links.any?
   end
-
 
 end
