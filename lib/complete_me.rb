@@ -38,7 +38,7 @@ class CompleteMe
   end
 
   def add_substring_and_string_to_library(substring, word)
-      library[substring] = {word => 1}    
+    library[substring] = {word => 1}    
   end
 
   def add_new_word_or_increment_wordcount(substring, word)
@@ -50,8 +50,8 @@ class CompleteMe
   end
 
   def suggestions_sorted_by_weight(substring)
-      sorted = library[substring].sort_by {|word, val| val}.reverse
-      retreive_words_from_word_weight_list(sorted)
+    sorted = library[substring].sort_by {|word, val| val}.reverse
+    retreive_words_from_word_weight_list(sorted)
   end
  
   def retreive_words_from_word_weight_list(sorted)
