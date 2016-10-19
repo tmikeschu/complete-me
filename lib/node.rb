@@ -64,7 +64,7 @@ class Node
     word_count  = 0
     word_count += 1 if terminal
     if links.any?
-      word_count += links.values.map { |node| node.count }.reduce(:+)
+      links.each_value {|node| word_count += node.count}
     end
     word_count 
   end
