@@ -2,7 +2,7 @@ require 'simplecov'
 SimpleCov.start
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
-require 'minitest/pride'
+require "minitest/emoji"
 require_relative '../lib/node'
 
 class NodeTest < Minitest::Test
