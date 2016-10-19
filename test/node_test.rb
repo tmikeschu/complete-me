@@ -3,7 +3,7 @@ SimpleCov.start
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
 require 'minitest/pride'
-require './lib/node'
+require_relative '../lib/node'
 
 class NodeTest < Minitest::Test
 
@@ -114,7 +114,7 @@ class NodeTest < Minitest::Test
   end 
 
   def test_it_populates_newline_separated_list
-    skip
+    # skip
     dictionary = File.read("/usr/share/dict/words")
     assert root.populate(dictionary)
   end
@@ -140,7 +140,7 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_counts_all_populated_words
-    skip
+    # skip
     dictionary = File.read("/usr/share/dict/words")
     root.populate(dictionary)    
     assert_equal 235886, root.count

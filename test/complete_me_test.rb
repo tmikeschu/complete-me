@@ -3,7 +3,8 @@ SimpleCov.start
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
 require 'minitest/pride'
-require './lib/complete_me'
+require_relative '../lib/complete_me'
+require 'pry'
 
 class CompleteMeTest < Minitest::Test
 
@@ -44,19 +45,20 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_it_populates_from_file
-    skip
+    # skip
     dictionary = File.read("/usr/share/dict/words")
     result = completion.populate(dictionary)
     assert_equal 235886, result.count
   end
 
   def test_it_populates_addresses_from_csv
-    skip
+    # skip
     addresses = CSV.read('addresses.csv')
     addresses = addresses.map {|row| row [-1]}
     addresses.shift
-    result = completion.populate(addresses)
-    assert_equal 293673, result.count
+    completion.populate(addresses)
+    #binding.pry
+    assert_equal 293605, completion.count
   end
 
   def test_it_returns_suggestion_for_substring
@@ -124,7 +126,7 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_suggest_returns_one_library_hash_value_and_other_trie_suggestion_from_dictionary
-    skip
+    # skip
     dictionary = File.read("/usr/share/dict/words")
     result = completion.populate(dictionary)
     completion.select("piz", "pizzeria")
@@ -132,7 +134,7 @@ class CompleteMeTest < Minitest::Test
   end
   
   def test_suggest_returns_two_library_hash_values_and_other_trie_suggestion_from_dictionary
-    skip
+    # skip
     dictionary = File.read("/usr/share/dict/words")
     result = completion.populate(dictionary)
     completion.select("piz", "pizzle")

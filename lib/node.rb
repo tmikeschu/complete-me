@@ -77,7 +77,11 @@ class Node
   end
 
   def convert_file_to_array_if_string(file)
-    file.split if file.is_a? String
+    if file.is_a? String
+      file.split 
+    else
+      file
+    end
   end
 
   def insert_file_lines(file)
