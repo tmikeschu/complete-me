@@ -31,7 +31,7 @@ class CompleteMe
 
   def select(substring, word)
     if library[substring].nil?
-      add_substring_and_string_to_library(substring, word)
+      add_substring_with_word_to_library(substring, word)
     else
       add_new_word_or_increment_wordcount(substring, word)
     end
@@ -43,9 +43,9 @@ class CompleteMe
 
   def add_new_word_or_increment_wordcount(substring, word)
     if library[substring][word]
-      library[substring][word] += 1
+       library[substring][word] += 1
     else
-      library[substring][word] = 1 
+       library[substring][word]  = 1 
     end
   end
 
@@ -55,6 +55,7 @@ class CompleteMe
   end
  
   def retreive_words_from_word_weight_list(sorted)
-    sorted.map!{|word_weight_pair| word_weight_pair.first}
+    sorted.map{|word_weight_pair| word_weight_pair.first}
   end
+  
 end
