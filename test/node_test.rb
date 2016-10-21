@@ -88,9 +88,9 @@ class NodeTest < Minitest::Test
     assert root.new_terminal_node.terminal
   end
 
-  def test_it_can_add_link_and_move_to_the_next_char
-    root.add_link_and_move_to_next_char("b", "o")
-    assert_equal [["b"], ["o"]], [root.links.keys, root.links.values.first.links.keys]
+  def test_it_adds_link
+    root.add_link("b")
+    assert_equal ["b"], root.links.keys
   end
 
   def test_word_count_starts_at_zero_when_no_words_in_trie
@@ -114,7 +114,7 @@ class NodeTest < Minitest::Test
   end 
 
   def test_it_populates_newline_separated_list
-    # skip
+    skip
     dictionary = File.read("/usr/share/dict/words")
     assert root.populate(dictionary)
   end
@@ -140,7 +140,7 @@ class NodeTest < Minitest::Test
   end
 
   def test_it_counts_all_populated_words
-    # skip
+    skip
     dictionary = File.read("/usr/share/dict/words")
     root.populate(dictionary)    
     assert_equal 235886, root.count

@@ -30,7 +30,7 @@ class Node
     elsif char_already_inserted?(first_char)
       links[first_char].insert(characters)
     else
-      add_link_and_move_to_next_char(first_char, characters)
+      add_link(first_char).insert(characters)
     end
   end
 
@@ -54,10 +54,8 @@ class Node
     Node.new(terminal = true)
   end
 
-  def add_link_and_move_to_next_char(first_char, characters)
-      new_node = Node.new
-      @links[first_char] = new_node
-      new_node.insert(characters)
+  def add_link(first_char)
+      @links[first_char] = Node.new
   end
 
   def count
