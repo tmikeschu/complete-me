@@ -55,7 +55,7 @@ class CompleteMe
   end
  
   def retreive_words_from_word_weight_list(sorted)
-    sorted.map{|word_weight_pair| word_weight_pair.first}
+    sorted.map(&:first)
   end
   
 end
